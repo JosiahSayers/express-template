@@ -1,0 +1,9 @@
+export class EmailExistsError extends Error { }
+export class RateLimitError extends Error { }
+export class EmailNotFoundError extends Error { }
+export class InvalidPasswordError extends Error { }
+export class UserDisabledError extends Error { }
+export class TokenExpiredError extends Error { }
+export class UserNotFoundError extends Error { }
+export class InvalidRefreshToken extends Error { }
+export class MissingRefreshToken extends Error { }

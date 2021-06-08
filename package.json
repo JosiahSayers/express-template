@@ -1,0 +1,60 @@
+{
+  "name": "blog-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test:integration": "NODE_ENV=testing jest --testPathPattern=integration\\.test\\.ts$",
+    "watch": "nodemon",
+    "build": "tsc",
+    "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\"",
+    "start": "node dist/index.js",
+    "container:test:integration": "docker-compose rm -f && docker-compose -f dc-testing-integration.yml up --build --remove-orphans --abort-on-container-exit --force-recreate"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JosiahSayers/blog-api.git"
+  },
+  "author": "Josiah Sayers",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JosiahSayers/blog-api/issues"
+  },
+  "homepage": "https://github.com/JosiahSayers/blog-api#readme",
+  "dependencies": {
+    "bcrypt-nodejs": "^0.0.3",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-joi-validation": "^5.0.0",
+    "joi": "^17.4.0",
+    "jsonwebtoken": "^8.5.1",
+    "node-fetch": "^2.6.1",
+    "node-fetch-cookies": "^2.0.1",
+    "pg": "^8.5.1",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.2.32"
+  },
+  "devDependencies": {
+    "@types/bcrypt-nodejs": "^0.0.31",
+    "@types/cookie-parser": "^1.4.2",
+    "@types/cors": "^2.8.10",
+    "@types/dotenv": "^8.2.0",
+    "@types/express": "^4.17.11",
+    "@types/jest": "^26.0.22",
+    "@types/jsonwebtoken": "^8.5.1",
+    "@types/node": "^14.14.37",
+    "@types/node-fetch": "^2.5.10",
+    "@typescript-eslint/eslint-plugin": "^4.21.0",
+    "@typescript-eslint/parser": "^4.21.0",
+    "eslint": "^7.24.0",
+    "fetch-cookie": "^0.11.0",
+    "jest": "^26.6.3",
+    "nodemon": "^2.0.7",
+    "ts-jest": "^26.5.5",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
+  }
+}

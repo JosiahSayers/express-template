@@ -1,0 +1,28 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=blog
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  api:
+    image: josiahsayers15/blog-api
+    build: .
+    environment: 
+      - NODE_ENV=testing
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+    command: sh -c "node dist/index.js"
+  # tests:
+  #   image: josiahsayers15/blog-api
+  #   environment:
+  #     - NODE_ENV=testing
+  #   depends_on:
+  #     - db
+  #     - api
+  #   command: sh -c "npm run test:integration"
