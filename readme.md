@@ -1,9 +1,20 @@
-# Blog API (Working Title)
+# Express Starter (Batteries Included)
 
 ## Table of Contents
 
+- [Features](#features)
 - [Local Testing](#local-testing)
   - [Integration](#integration-testing)
+
+## Features
+
+- Postgres Database
+- Express Server
+- User Accounts
+- Request Validation (Joi)
+- Unit Testing (Jest)
+- Integration Testing (Jest)
+- Local dev environment (Docker)
 
 ## Local Testing
 
