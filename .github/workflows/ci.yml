@@ -15,13 +15,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
+    - name: Setup - Checkout
       uses: actions/checkout@v1
 
-    - name: Install node
+    - name: Setup - Install node
       uses: actions/setup-node@v1
       with:
         node-version: 14.x
+    
+    - name: Setup - Install dependencies
+      run: npm install
     
     - name: Lint
       run: npm run lint
@@ -31,9 +34,6 @@ jobs:
 
     - name: Start API and DB containers
       run: npm run container:test:integration
-
-    - name: Install dependencies
-      run: npm install
 
     - name: Run tests
       run: npm run test:integration
