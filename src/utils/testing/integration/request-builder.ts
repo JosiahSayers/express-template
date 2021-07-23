@@ -42,7 +42,8 @@ export class TestRequestBuilder {
             console.log('RESPONSE STATUS', res.status);
             console.log('RESPONSE STATUS TEXT', res.statusText);
             try {
-                console.log('RESPONSE BODY', await res.json());
+                const clonedRes = res.clone();
+                console.log('RESPONSE BODY', await clonedRes.json());
             } catch {}
         }
         return res;

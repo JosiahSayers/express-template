@@ -1,6 +1,4 @@
-import { getRepository } from 'typeorm';
-import { User, UserRole } from '../../../models/db/user.model';
-import { AuthenticationService } from '../../../services/authentication/authentication.service';
+import { UserRole } from '../../../models/db/user.model';
 
 export const TestUsers = {
     adminUser: {
@@ -15,21 +13,4 @@ export const TestUsers = {
         name: 'Editor User',
         role: UserRole.STANDARD
     }
-};
-
-export const createUsersForTests = async (): Promise<void> => {
-    const repo = getRepository<User>('user');
-
-    for (const user of Object.values(TestUsers)) {
-        await AuthenticationService.register({
-            name: user.name,
-            email: user.email,
-            password: user.password
-        });
-        const userEntity = await repo.findOne({ email: user.email });
-        userEntity.role = user.role;
-        await repo.save(userEntity);
-    }
-
-    console.log('ADDED TEST USERS!');
 };

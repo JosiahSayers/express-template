@@ -92,7 +92,7 @@ export class JwtService {
     private static async signRefreshToken(data: any): Promise<string> {
         return new Promise(async (resolve, reject) => jwt.sign(
             data,
-            cachedRefreshKey,
+            cachedRefreshKey || (await this.getCurrentKeys())[0].privateKey,
             { algorithm: 'RS256' },
             (err, encoded) => err ? reject(err) : resolve(encoded))
         );

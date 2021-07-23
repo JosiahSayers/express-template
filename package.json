@@ -5,11 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test:integration": "NODE_ENV=testing jest --testPathPattern=integration\\.test\\.ts$",
+    "start": "node dist/index.js",
     "watch": "nodemon",
     "build": "tsc",
     "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\"",
-    "start": "node dist/index.js",
-    "container:test:integration": "docker-compose rm -f && docker-compose -f dc-testing-integration.yml up --build --remove-orphans --abort-on-container-exit --force-recreate"
+    "local": "docker-compose -f docker-compose.dev.yml up",
+    "local:clean": "docker compose -f docker compose.dev.yml up --build --remove-orphans --force-recreate",
+    "container:test:integration": "docker compose -f docker-compose.ci.yml up --build --remove-orphans --force-recreate"
   },
   "repository": {
     "type": "git",

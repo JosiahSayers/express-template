@@ -1,12 +1,12 @@
 import { ConnectionOptions } from 'typeorm';
-import dotenv from 'dotenv';
 import * as entities from '../models/db';
+import * as dotenv from 'dotenv';
 
 export class Environment {
     static loadEnvFile(): void {
-        if (process.env.NODE_ENV === 'testing') {
+        if (this.isTesting) {
             dotenv.config({ path: 'env/testing.env'});
-        } else if (process.env.NODE_ENV !== 'production') {
+        } else if (!this.isProduction) {
             dotenv.config({ path: 'env/.env' });
         }
     }

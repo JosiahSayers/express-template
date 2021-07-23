@@ -1,23 +1,38 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { UserRole } from '../../models/db/user';
-import { Environment } from '../../utils/environment';
+import { UserRole } from '../../models/db/user.model';
 import { TestEnvironment } from '../../utils/testing/test-environment';
 import { TestRequestBuilder } from '../../utils/testing/integration/request-builder';
 import { signInAs } from '../../utils/testing/integration/user-helper';
 import { TestUsers } from '../../utils/testing/integration/test-data';
+import { TestDataHelper } from '../../utils/testing/integration/test-data-helper';
 
-describe('User routes', () => {
-    Environment.loadEnvFile();
-    const baseRoute = `${TestEnvironment.apiBase}/users`;
-    const requestBuilder = new TestRequestBuilder();
-    const testUser = {
-        name: 'NAME',
-        email: 'EMAIL@EMAIL.COM',
-        password: 'PASSWORD'
+describe('User Router', () => {
+    let requestBuilder: TestRequestBuilder;
+    let baseRoute: string;
+    let route: string;
+    let testUser: {
+        name: string;
+        email: string;
+        password: string;
     };
 
+    beforeAll(async () => {
+        requestBuilder = new TestRequestBuilder();
+        testUser = {
+            name: 'NAME',
+            email: 'EMAIL@EMAIL.COM',
+            password: 'PASSWORD'
+        };
+        await TestDataHelper.sharedSetup();
+        baseRoute = `${TestEnvironment.apiBase}/users`;
+    });
+
+    afterAll(async () => {
+        await TestDataHelper.sharedTeardown();
+    });
+
     describe('POST /register', () => {
-        const route = `${baseRoute}/register`;
+        beforeAll(() => route = `${baseRoute}/register`);
 
         it('returns an error if a valid email is not sent in the body', async () => {
             const invalidEmails = [
@@ -89,13 +104,13 @@ describe('User routes', () => {
             expect(resBody).toMatchObject({
                 email: testUser.email.toLowerCase(),
                 name: testUser.name,
-                role: 'commenter'
+                role: 'standard'
             });
         });
     });
 
     describe('GET /profile', () => {
-        const route = `${baseRoute}/profile`;
+        beforeAll(() => route = `${baseRoute}/profile`);
 
         it('returns an error if the user is not logged in', async () => {
             const res = await requestBuilder.get(route, { disableCookies: true });
@@ -110,14 +125,14 @@ describe('User routes', () => {
             expect(resBody).toMatchObject({
                 name: testUser.name,
                 email: testUser.email.toLowerCase(),
-                role: UserRole.COMMENTER
+                role: UserRole.STANDARD
             });
             expect(resBody).toHaveProperty('id');
         });
     });
 
     describe('POST /sign-in', () => {
-        const route = `${baseRoute}/sign-in`;
+        beforeAll(() => route = `${baseRoute}/sign-in`);
 
         it('returns an error if the email is empty', async () => {
             const res = await requestBuilder.post(route, { email: '', password: testUser.password });
@@ -175,7 +190,7 @@ describe('User routes', () => {
     });
 
     describe('POST /sign-out', () => {
-        const route = `${baseRoute}/sign-out`;
+        beforeAll(() => route = `${baseRoute}/sign-out`);
 
         it('removes the accessToken and refreshToken cookies', async () => {
             const res = await requestBuilder.post(route);
@@ -199,11 +214,7 @@ describe('User routes', () => {
 
         it('returns an unauthorized error if the user is not an admin', async () => {
             const responses = [];
-            await signInAs(TestUsers.viewerUser, requestBuilder);
-            responses.push(await requestBuilder.get(url('anything')));
-            await signInAs(TestUsers.commenterUser, requestBuilder);
-            responses.push(await requestBuilder.get(url('anything')));
-            await signInAs(TestUsers.editorUser, requestBuilder);
+            await signInAs(TestUsers.standardUser, requestBuilder);
             responses.push(await requestBuilder.get(url('anything')));
             responses.push(await requestBuilder.get(url('anything'), { disableCookies: true }));
             expect(responses.every((res) => !res.ok && res.status === 401)).toBe(true);
@@ -226,13 +237,13 @@ describe('User routes', () => {
 
         it('searches the query against the email property', async () => {
             await signInAs(TestUsers.adminUser, requestBuilder);
-            const res = await requestBuilder.get(url(TestUsers.viewerUser.email));
+            const res = await requestBuilder.get(url(TestUsers.standardUser.email));
             const resBody = await res.json();
             expect(res.ok).toBe(true);
             expect(resBody.users[0]).toMatchObject({
-                name: TestUsers.viewerUser.name,
-                email: TestUsers.viewerUser.email,
-                role: TestUsers.viewerUser.role
+                name: TestUsers.standardUser.name,
+                email: TestUsers.standardUser.email,
+                role: TestUsers.standardUser.role
             });
             expect(resBody.users[0]).toHaveProperty('id');
             expect(resBody).toHaveProperty('totalMatched');
@@ -258,11 +269,7 @@ describe('User routes', () => {
 
         it('returns an unauthorized error if the user is not an admin', async () => {
             const responses = [];
-            await signInAs(TestUsers.viewerUser, requestBuilder);
-            responses.push(await requestBuilder.patch(url('anything')));
-            await signInAs(TestUsers.commenterUser, requestBuilder);
-            responses.push(await requestBuilder.patch(url('anything')));
-            await signInAs(TestUsers.editorUser, requestBuilder);
+            await signInAs(TestUsers.standardUser, requestBuilder);
             responses.push(await requestBuilder.patch(url('anything')));
             responses.push(await requestBuilder.patch(url('anything'), { disableCookies: true }));
             expect(responses.every((res) => !res.ok)).toBe(true);
@@ -288,15 +295,15 @@ describe('User routes', () => {
         });
 
         it('successfully changes a user\'s role', async () => {
-            await signInAs(TestUsers.viewerUser, requestBuilder);
+            await signInAs(TestUsers.standardUser, requestBuilder);
             const viewer = await (await requestBuilder.get(`${baseRoute}/profile`)).json();
             await signInAs(TestUsers.adminUser, requestBuilder);
-            const res = await requestBuilder.patch(url(viewer.id), { role: 'editor' });
+            const res = await requestBuilder.patch(url(viewer.id), { role: 'admin' });
             const resBody = await res.json();
             expect(res.ok).toBe(true);
             expect(resBody).toEqual({
                 ...viewer,
-                role: 'editor'
+                role: 'admin'
             });
 
             // cleanup

@@ -1,0 +1,24 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./container_files/db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=app
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    environment: 
+      - NODE_ENV=local
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/app
+      - PORT=3000
+    ports:
+      - 3000:3000
+    depends_on:
+      - db

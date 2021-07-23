@@ -7,7 +7,7 @@ services:
     ports:
       - 5432:5432
     environment:
-      - POSTGRES_DB=blog
+      - POSTGRES_DB=app
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
   pgadmin:
@@ -19,3 +19,16 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: test@test.com
       PGADMIN_DEFAULT_PASSWORD: password
+  api:
+    build:
+      dockerfile: Dockerfile.dev
+      context: .
+    environment: 
+      - NODE_ENV=local
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+    command: sh -c "npm install && npm run watch"

@@ -8,7 +8,7 @@ const validator = createValidator({ passError: true });
 router.get('/', validator.query(BaseRouteRquestJoi), async (req: ValidatedRequest<BaseRouteRequestSchema>, res: Response, next: NextFunction) => {
     try {
         if (req.query.echo === 'throw') { throw new Error('Intentional'); }
-        return res.send(req.query.echo || 'You provided nothing for me to echo');
+        return res.json({ echo: req.query.echo || 'You provided nothing for me to echo' });
     } catch (e) {
         next(e);
     }
