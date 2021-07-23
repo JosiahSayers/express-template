@@ -28,10 +28,13 @@ jobs:
     - name: Typescript build check
       run: npm run build
 
+    - name: Unit Tests
+      run: npm run test:unit
+
     - name: Start API and DB containers
       run: npm run container:test:integration
 
-    - name: Run integration tests
+    - name: Integration Tests
       run: npm run test:integration
 
     - name: Stop containers
