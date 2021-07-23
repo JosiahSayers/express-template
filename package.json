@@ -12,7 +12,8 @@
     "local": "docker-compose -f docker-compose.dev.yml up",
     "local:clean": "docker compose -f docker compose.dev.yml up --build --remove-orphans --force-recreate",
     "container:test:integration": "docker-compose -f docker-compose.ci.yml up -d --build --remove-orphans --force-recreate",
-    "container:test:integration:stop": "docker-compose -f docker-compose.ci.yml down"
+    "container:test:integration:stop": "docker-compose -f docker-compose.ci.yml down",
+    "ci:local": "npm install && npm run lint && npm run build && npm run container:test:integration && npm run test:integration && npm run container:test:integration:stop"
   },
   "repository": {
     "type": "git",
