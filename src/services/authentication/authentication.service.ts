@@ -46,11 +46,14 @@ export class AuthenticationService {
 
   static async exchangeRefreshTokenForAccessToken(token: string): Promise<RefreshTokenResponse> {
     const refreshToken = await this.refreshDb().findOne({ token }, { relations: ['user', 'user.refreshTokens'] });
-    const user = refreshToken.user;
-    user.refreshTokens = user.refreshTokens.filter((token) => token.id !== refreshToken.id);
-    await this.refreshDb().delete({ id: refreshToken.id });
 
     if (refreshToken) {
+      // remove existing refresh token
+      const user = refreshToken.user;
+      user.refreshTokens = user.refreshTokens.filter((token) => token.id !== refreshToken.id);
+      await this.refreshDb().delete({ id: refreshToken.id });
+      
+      // generate and attach new refresh token
       const newTokens = await JwtService.generateTokens(user);
       user.refreshTokens.push(RefreshToken.generateFromToken(newTokens.refreshToken));
       await this.userDb().save(user);
