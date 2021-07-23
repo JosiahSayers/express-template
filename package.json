@@ -8,7 +8,7 @@
     "start": "node dist/index.js",
     "watch": "nodemon",
     "build": "tsc",
-    "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\"",
+    "lint": "eslint \"**/*.{js,ts}\"",
     "local": "docker-compose -f docker-compose.dev.yml up",
     "local:clean": "docker compose -f docker compose.dev.yml up --build --remove-orphans --force-recreate",
     "container:test:integration": "docker-compose -f docker-compose.ci.yml up -d --build --remove-orphans --force-recreate",

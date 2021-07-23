@@ -10,7 +10,7 @@ on:
     - main
 
 jobs:
-  integration:
+  continuous-integration-checks:
     timeout-minutes: 10
     runs-on: ubuntu-latest
 
@@ -22,8 +22,14 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 14.x
+    
+    - name: Lint
+      run: npm run lint
 
-    - name: Start containers
+    - name: Typescript build check
+      run: npm run build
+
+    - name: Start API and DB containers
       run: npm run container:test:integration
 
     - name: Install dependencies
