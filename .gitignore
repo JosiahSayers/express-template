@@ -14,7 +14,6 @@ results
 tmp
 
 # Build
-public/css/main.css
 dist
 
 # Coverage reports
@@ -22,15 +21,9 @@ coverage
 
 # API keys and secrets
 *.env
-gcp-key.json
 
 # Dependency directory
 node_modules
-bower_components
-
-# Editors
-.idea
-*.iml
 
 # OS metadata
 .DS_Store

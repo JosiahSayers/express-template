@@ -70,7 +70,7 @@ export class JwtService {
             return;
         }
 
-        await JwtService.getCurrentKeys();
+        await this.getCurrentKeys();
 
         if (cachedKeys[header.kid]) {
             callback(null, cachedKeys[header.kid]);

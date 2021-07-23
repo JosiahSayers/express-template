@@ -18,7 +18,6 @@ export async function createApp(): Promise<Express> {
 
     try {
         await retry(() => createConnection(Environment.dbConfig));
-        console.log('Connected to DB');
         await JwtService.startSigningKeyUpdate();
     } catch (e) {
         console.log('Unable to connect to db', e);

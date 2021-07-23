@@ -28,5 +28,11 @@ describe('Home Router', () => {
             const json = await res.json();
             expect(json.echo).toBe('this_should_be_returned');
         });
+
+        it('returns the response from the error handler when passed "throw"', async () => {
+            const res = await requestBuilder.get(`${baseRoute}?echo=throw`);
+            const json = await res.json();
+            expect(json).toEqual({ msg: 'I caught the error!' });
+        });
     });
 });
