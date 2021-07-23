@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { UserRole } from '../../models/db/user.model';
 import { TestEnvironment } from '../../utils/testing/test-environment';
 import { TestRequestBuilder } from '../../utils/testing/integration/request-builder';
