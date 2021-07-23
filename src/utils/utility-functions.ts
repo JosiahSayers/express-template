@@ -14,6 +14,6 @@ export async function retry(func: () => any, maxTries = 5): Promise<void> {
     } while (tries < maxTries && !successful);
 
     if (!successful) {
-        throw new Error('Not able to successfully complete function within 5 tries');
+        throw new Error(`Not able to successfully complete function within ${maxTries} tries`);
     }
 }
