@@ -31,7 +31,7 @@ jobs:
     - name: Start API and DB containers
       run: npm run container:test:integration
 
-    - name: Run tests
+    - name: Run integration tests
       run: npm run test:integration
 
     - name: Stop containers
