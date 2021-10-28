@@ -1,5 +1,7 @@
 # Express Starter (Batteries Included)
 
+[![CI](https://github.com/JosiahSayers/express-template/actions/workflows/ci.yml/badge.svg)](https://github.com/JosiahSayers/express-template/actions/workflows/ci.yml)
+
 ## Table of Contents
 
 - [Features](#features)
